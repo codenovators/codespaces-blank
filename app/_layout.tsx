@@ -1,24 +1,31 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated';
+import { Slot } from "expo-router";
+import { ThemeProvider, useTheme } from "../components/ThemeContext";
+import { StatusBar } from "expo-status-bar";
+import { View } from "react-native";
+import * as NavigationBar from "expo-navigation-bar";
+import { useEffect } from "react";
 
-import { useColorScheme } from '@/hooks/use-color-scheme';
+function AppContent() {
+  const { isDark } = useTheme();
 
-export const unstable_settings = {
-  anchor: '(tabs)',
-};
-
-export default function RootLayout() {
-  const colorScheme = useColorScheme();
+  useEffect(() => {
+    
+    // Set button style
+    NavigationBar.setButtonStyleAsync(isDark ? "light" : "dark");
+  }, [isDark]);
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
-      </Stack>
-      <StatusBar style="auto" />
+    <View style={{ flex: 1, backgroundColor: isDark ? "#121212" : "#fff" }}>
+      <StatusBar style={isDark ? "light" : "dark"} />
+      <Slot />
+    </View>
+  );
+}
+
+export default function RootLayout() {
+  return (
+    <ThemeProvider>
+      <AppContent />
     </ThemeProvider>
   );
 }
