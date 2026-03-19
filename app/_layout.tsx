@@ -1,5 +1,6 @@
 import { Slot } from "expo-router";
 import { ThemeProvider, useTheme } from "../components/ThemeContext";
+import { CartProvider } from "../components/CartContext";
 import { StatusBar } from "expo-status-bar";
 import { View } from "react-native";
 import * as NavigationBar from "expo-navigation-bar";
@@ -9,8 +10,6 @@ function AppContent() {
   const { isDark } = useTheme();
 
   useEffect(() => {
-    
-    // Set button style
     NavigationBar.setButtonStyleAsync(isDark ? "light" : "dark");
   }, [isDark]);
 
@@ -25,7 +24,9 @@ function AppContent() {
 export default function RootLayout() {
   return (
     <ThemeProvider>
-      <AppContent />
+      <CartProvider>
+        <AppContent />
+      </CartProvider>
     </ThemeProvider>
   );
 }
